@@ -2,7 +2,6 @@ from functools import wraps
 from inspect import signature
 from typing import Callable, Any, Union, List
 from playwright.sync_api import expect, Page
-from config.config import load_config
 from playwright.sync_api import (
     TimeoutError as PlaywrightTimeoutError,
     Error as PlaywrightError
@@ -52,7 +51,6 @@ def handle_playwright_errors(func: Callable) -> Callable:
 class BasePage:
     def __init__(self, page: Page):
         self.page = page
-        self.conf = load_config()
 
     def _take_screenshot(self, method_name: str, error_type: str):
         """Внутренний метод для создания скриншотов при ошибках"""
@@ -60,13 +58,6 @@ class BasePage:
             f"screenshot_tests/{method_name}/{method_name}_{error_type}.png"
         )
         self.page.screenshot(path=screenshot_path, full_page=True)
-
-    @handle_playwright_errors
-    def log_in(self, mail, locator_mail, locator_password, locator_button):
-        """Авторизация"""
-        self.fill_text(locator_mail, mail)
-        self.fill_text(locator_password, self.conf.creds.password_valid)
-        self.click(locator_button)
 
     @handle_playwright_errors
     def open(self, uri: str):
@@ -103,6 +94,7 @@ class BasePage:
     @handle_playwright_errors
     def get_text(self, locator: str):
         """Получить текст элемента"""
+        self.page.is_visible(locator)
         return self.page.locator(locator).text_content()
 
     @handle_playwright_errors
@@ -171,24 +163,6 @@ class BasePage:
         """Проверка - 'имя' и 'значение' стиля элемента равны заданным параметрам"""
         element = self.page.locator(locator) if not locator.startswith('/') else self.page.locator(f'xpath={locator}')
         return expect(element).to_have_css(name_style, value_style)
-
-    @handle_playwright_errors
-    def expect_invalid_input_color(self, locator_placeholder: Union[str, List[str]],
-                                   locator_body_input: Union[str, List[str]]):
-        """Проверка цвета при ошибке валидации"""
-        if not isinstance(locator_placeholder, list):
-            self.expect_style_element(locator_placeholder, 'color', self.conf.css.error_border_color)
-        else:
-            for locator in locator_placeholder:
-                self.expect_style_element(locator, 'color', self.conf.css.error_border_color)
-
-        if not isinstance(locator_body_input, list):
-            self.expect_style_element(locator_body_input, 'background-color', self.conf.css.error_background_color)
-            self.expect_style_element(locator_body_input, 'border-color', self.conf.css.error_border_color)
-        else:
-            for locator in locator_body_input:
-                self.expect_style_element(locator, 'background-color', self.conf.css.error_background_color)
-                self.expect_style_element(locator, 'border-color', self.conf.css.error_border_color)
 
     @handle_playwright_errors
     def clear_inputs(self, locators: Union[str, List[str]]):

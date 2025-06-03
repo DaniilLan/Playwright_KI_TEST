@@ -143,7 +143,7 @@ class SerbPage(BasePage):
         self.page.reload()
 
     def go_to_page_doctor(self):
-        self.open(self.conf.urls.mmil)
+        self.open('http://192.168.7.35:8091/patients')
 
     def check_interpretation_for_test_CAN(self, answer):
         self.click('//*[@id="root"]/div/div[1]/main/ul/li')
@@ -161,30 +161,30 @@ class SerbPage(BasePage):
             text_inter = CAH.text_interpretation_1
         elif answer is CAH.answers_2_99:
             text_inter = CAH.text_interpretation_1
-        elif answer == CAH.answers_1_96:
-            text_inter = CAH.text_answer_1
-        elif answer == CAH.answers_2_102:
-            text_inter = CAH.text_answer_2
-        elif answer == CAH.answers_2_105:
-            text_inter = CAH.text_answer_2
-        elif answer == CAH.answers_2_120:
-            text_inter = CAH.text_answer_2
-        elif answer == CAH.answers_2_135:
-            text_inter = CAH.text_answer_2
-        elif answer == CAH.answers_2_138:
-            text_inter = CAH.text_answer_2
-        elif answer == CAH.answers_3_144:
-            text_inter = CAH.text_answer_3
-        elif answer == CAH.answers_3_150:
-            text_inter = CAH.text_answer_3
-        elif answer == CAH.answers_2_example:
-            text_inter = CAH.text_answer_2
-        elif answer == CAH.answers_2_120:
-            text_inter = CAH.text_answer_2
-        elif answer == CAH.answers_3_max_210:
-            text_inter = CAH.text_answer_3
-        elif answer == CAH.answers_1_min_30:
-            text_inter = CAH.text_answer_1
+        elif answer is CAH.answers_1_96:
+            text_inter = CAH.text_interpretation_1
+        elif answer is CAH.answers_2_102:
+            text_inter = CAH.text_interpretation_2
+        elif answer is CAH.answers_2_105:
+            text_inter = CAH.text_interpretation_2
+        elif answer is CAH.answers_2_120:
+            text_inter = CAH.text_interpretation_2
+        elif answer is CAH.answers_2_135:
+            text_inter = CAH.text_interpretation_2
+        elif answer is CAH.answers_2_138:
+            text_inter = CAH.text_interpretation_2
+        elif answer is CAH.answers_3_144:
+            text_inter = CAH.text_interpretation_3
+        elif answer is CAH.answers_3_150:
+            text_inter = CAH.text_interpretation_3
+        elif answer is CAH.answers_2_example:
+            text_inter = CAH.text_interpretation_3
+        elif answer is CAH.answers_2_120:
+            text_inter = CAH.text_interpretation_3
+        elif answer is CAH.answers_3_max_210:
+            text_inter = CAH.text_interpretation_3
+        elif answer is CAH.answers_1_min_30:
+            text_inter = CAH.text_interpretation_1
         fact_text = self.get_text('//html/body/div[2]/div/div[3]/div/div[3]/div/div[2]/span')
         assert fact_text == text_inter, (f'{fact_text} \n'
                                          f'!= {text_inter}\n'
@@ -235,7 +235,7 @@ class SerbPage(BasePage):
                 scale, true_interpretations = OKO.interpretations[kay]
                 text_inter = self.get_text(f'//div[@class="testConclusion-container"][.//span[text()="{scale}"]]')
                 assert text_inter == true_interpretations, (f"Ошибка текст "
-                                                            f"\nФР: {text_inter} "
+                                                            f"\nФР: {text_inter}"
                                                             f"\n!= "
                                                             f"\nОР: {true_interpretations}")
         # Нужно написать условие, которые будет проверять отсутствие шкал (интерпретаций)
@@ -244,3 +244,5 @@ class SerbPage(BasePage):
         # Метод для "не" видимости элемента:
         # element = page.locator("XPath-какой-то")
         # expect(element).not_to_be_visible()
+
+
