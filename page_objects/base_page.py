@@ -191,6 +191,11 @@ class BasePage:
         self.page.wait_for_load_state()
 
     @handle_playwright_errors
+    def wait_load_state_networking(self):
+        """Ожидание конкретного URL на текущей странице"""
+        self.page.wait_for_load_state("networkidle")
+
+    @handle_playwright_errors
     def expect_url_pdf(self, url_pdf: str, locator: str):
         """Ожидание открытого URL (PDF)"""
         with self.page.context.expect_page() as new_page_info:

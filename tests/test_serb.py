@@ -52,39 +52,39 @@ class TestSerb:
     #     auth_serb.go_to_page_doctor()
     #     auth_serb.check_interpretation_for_test(answer)
 
-    @pytest.mark.parametrize('answer', [
-                                                # MMIL.answer_test_yes,
-                                                # MMIL.answer_test_no,
-                                                # MMIL.answer_test_less,
-                                                # MMIL.answer_exampl,
-                                                # MMIL.answer_BAA1_random,
-                                                # MMIL.answer_BAA2_random,
-                                                MMIL.answer_COK_random,
-                                                MMIL.answer_COK_random,
-                                                # MMIL.answer_KOEA1_random,
-                                                ],
-                             ids=[
-                                 # "answer_test_yes",
-                                 # "answer_test_no",
-                                 # "answer_test_less",
-                                 # "answer_exampl",
-                                 # "MMIL.answer_BAA1_random",
-                                 # "MMIL.answer_BAA2_random"
-                                 "MMIL.answer_COK_random1",
-                                 "MMIL.answer_COK_random2",
-                                 # "MMIL.answer_KOEA1_random",
-                             ]
-                             )
-    def test_MMIL(self, auth_serb, answer):
-        auth_serb.create_test_go_to_test_MMIL()
-        auth_serb.select_test_MMIL()
-        auth_serb.skip_manual()
-        for answer_key in answer:
-            class_name, text = MMIL.transcript[answer_key]
-            auth_serb.click_by_answer(class_name, text)
-            auth_serb.save_answer_in_test()
-        auth_serb.expect_notification_completed_test()
-        auth_serb.go_to_page_doctor()
+    # @pytest.mark.parametrize('answer', [
+    #                                     MMIL.answer_test_yes,
+    #                                     # MMIL.answer_test_no,
+    #                                     # MMIL.answer_test_less,
+    #                                     # MMIL.answer_exampl,
+    #                                     # MMIL.answer_BAA1_random,
+    #                                     # MMIL.answer_BAA2_random,
+    #                                     # MMIL.answer_COK_random,
+    #                                     # MMIL.answer_COK_random,
+    #                                     # MMIL.answer_KOEA1_random,
+    #                                     ],
+    #                          ids=[
+    #                              "answer_test_yes",
+    #                              # "answer_test_no",
+    #                              # "answer_test_less",
+    #                              # "answer_exampl",
+    #                              # "MMIL.answer_BAA1_random",
+    #                              # "MMIL.answer_BAA2_random"
+    #                              # "MMIL.answer_COK_random1",
+    #                              # "MMIL.answer_COK_random2",
+    #                              # "MMIL.answer_KOEA1_random",
+    #                          ]
+    #                          )
+    # def test_MMIL(self, auth_serb, answer):
+    #     auth_serb.create_test_go_to_test_MMIL()
+    #     auth_serb.select_test_MMIL()
+    #     auth_serb.skip_manual()
+    #     for answer_key in answer:
+    #         class_name, text = MMIL.transcript[answer_key]
+    #         auth_serb.click_by_answer(class_name, text)
+    #         auth_serb.save_answer_in_test()
+    #     auth_serb.expect_notification_completed_test()
+    #     auth_serb.go_to_page_doctor()
 
     # def test_IIG(self, auth_serb):
     #     auth_serb.create_test_go_to_test_IIG()
@@ -111,27 +111,27 @@ class TestSerb:
     # def test_delete(self, auth_serb):
     #     auth_serb.delete_all_obs('Ланцов Даниил Андреевич')
 
-    # @pytest.mark.parametrize('answer', [
-    #                                     # OKO.answer_min,
-    #                                     # OKO.answer_all_max,
-    #                                     # OKO.answer_0_less_limit,
-    #                                     OKO.answer_all_limit,
-    #                                     ],
-    #                          ids=[
-    #                              # "answer_min",
-    #                              # "answer_all_max",
-    #                              # "answer_0_less_limit",
-    #                              "answer_all_limit",
-    #                          ]
-    #                          )
-    # def test_OKO(self, auth_serb, answer):
-    #     auth_serb.create_test_go_to_test_OKO()
-    #     auth_serb.select_test_OKO()
-    #     auth_serb.skip_manual()
-    #     for answer_key in answer:
-    #         class_name, text = OKO.transcript[answer_key]
-    #         auth_serb.click_by_answer(class_name, text)
-    #         auth_serb.save_answer_in_test()
-    #     auth_serb.expect_notification_completed_test()
-    #     auth_serb.go_to_page_doctor()
-    #     auth_serb.check_interpretation_for_test_OKO(answer)
+    @pytest.mark.parametrize('answer', [
+                                        OKO.answer_0_min,
+                                        OKO.answer_all_max,
+                                        OKO.answer_0_less_limit,
+                                        OKO.answer_all_limit,
+                                        ],
+                             ids=[
+                                 "answer_0_min",
+                                 "answer_all_max",
+                                 "answer_0_less_limit",
+                                 "answer_all_limit",
+                             ]
+                             )
+    def test_OKO(self, auth_serb, answer):
+        auth_serb.create_test_go_to_test_OKO()
+        auth_serb.select_test_OKO()
+        auth_serb.skip_manual()
+        for answer_key in answer:
+            class_name, text = OKO.transcript[answer_key]
+            auth_serb.click_by_answer(class_name, text)
+            auth_serb.save_answer_in_test()
+        auth_serb.expect_notification_completed_test()
+        auth_serb.go_to_page_doctor()
+        auth_serb.check_interpretation_for_test_OKO(answer)

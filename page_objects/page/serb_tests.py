@@ -20,6 +20,7 @@ class LocatorsSERB:
     CAH_ANSWER_1 = '//div[@class="CPYE"]//div[span[text()="3"]]'
     NOTIFICATION = '//div[text()="Тест пройден. За результатами обратитесь к врачу."]'
     PATIENT_OKO = '//li[.//span[text()="Тест ОКО "]]'
+    PATIENT_MMIL = '//li[.//span[text()="Тест ММИЛ "]]'
     ADD_OBSLED = '//*[@id="root"]/div/div[1]/main/div[2]/div/button'
     KLASTER_2 = '//div[span[text()="Психодиагностическое обследование"]]'
     SHARE_TEST = '//html/body/div[2]/div/div[3]/div[2]/button'
@@ -27,6 +28,7 @@ class LocatorsSERB:
     SHARE_LINK_TEST = '//html/body/div[2]/div/div[2]/div[2]/div/input'
     BUTTON_RESULT_TEST = '//*[@id="root"]/div/div[1]/main/div[2]/table/tbody/tr[1]/td[5]/div/button[2]'
     RESULT_TEST_OKO = "//span[text()='Опросник когнитивных ошибок (ОКО)']"
+
 
 class SerbPage(BasePage):
 
@@ -82,7 +84,7 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
         url_test = self.page.get_attribute('//html/body/div[2]/div/div[2]/div[2]/div/input', 'value')
         self.open(url_test)
-        time.sleep(1)
+        self.wait_load_state_networking()
         self.page.reload()
 
     def create_test_go_to_test_MMIL(self):
@@ -94,7 +96,7 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
         url_test = self.page.get_attribute('//html/body/div[2]/div/div[2]/div[2]/div/input', 'value')
         self.open(url_test)
-        time.sleep(1)
+        self.wait_load_state_networking()
         self.page.reload()
 
     def create_test_go_to_test_BPC(self):
@@ -105,7 +107,7 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
         url_test = self.page.get_attribute('//html/body/div[2]/div/div[2]/div[2]/div/input', 'value')
         self.open(url_test)
-        time.sleep(1)
+        self.wait_load_state_networking()
         self.page.reload()
 
     def create_test_go_to_test_IIG(self):
@@ -116,7 +118,7 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
         url_test = self.page.get_attribute('//html/body/div[2]/div/div[2]/div[2]/div/input', 'value')
         self.open(url_test)
-        time.sleep(1)
+        self.wait_load_state_networking()
         self.page.reload()
 
     def create_test_go_to_test_ITREC(self):
@@ -127,7 +129,7 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
         url_test = self.page.get_attribute('//html/body/div[2]/div/div[2]/div[2]/div/input', 'value')
         self.open(url_test)
-        time.sleep(1)
+        self.wait_load_state_networking()
         self.page.reload()
 
     def create_test_go_to_test_OKO(self):
@@ -139,7 +141,7 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.SHARE_TEST)
         url_test = self.page.get_attribute(LocatorsSERB.SHARE_LINK_TEST, 'value')
         self.open(url_test)
-        time.sleep(1)
+        self.wait_load_state_networking()
         self.page.reload()
 
     def go_to_page_doctor(self):
@@ -149,9 +151,9 @@ class SerbPage(BasePage):
         self.click('//*[@id="root"]/div/div[1]/main/ul/li')
         self.click('//*[@id="root"]/div/div[1]/main/div[2]/table/tbody/tr[1]/td[5]/div/button[2]')
         self.click('//html/body/div[2]/div/ul/div[2]')
-        time.sleep(1)
+        self.wait_load_state_networking()
         self.click('//html/body/div[2]/div/div[4]/div/div[2]/div/span')
-        time.sleep(1)
+        self.wait_load_state_networking()
         text_inter = ''
         if answer is CAH.answers_1_34:
             text_inter = CAH.text_interpretation_1
@@ -227,13 +229,14 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.PATIENT_OKO)
         self.click(LocatorsSERB.BUTTON_RESULT_TEST)
         self.click(LocatorsSERB.KLASTER_2)
-        time.sleep(1)
+        self.wait_load_state_networking()
         self.click(LocatorsSERB.RESULT_TEST_OKO)
-        time.sleep(1)
-        if answer is OKO.answer_all_limit or OKO.answer_all_max:
+        self.wait_load_state_networking()
+        if answer in (OKO.answer_all_limit, OKO.answer_all_max): # раньше было условие на проверку через is, но как выяснилось лучше использовать in
             for kay in OKO.interpretations: # Я убрал тут items() так как мне нужно доставить только ключи "kay" из словаря интерпретаций
                 scale, true_interpretations = OKO.interpretations[kay]
-                text_inter = self.get_text(f'//div[@class="testConclusion-container"][.//span[text()="{scale}"]]')
+                locator = f'//div[@class="testConclusion-container"][.//span[text()="{scale}"]]'
+                text_inter = self.get_text(locator)
                 assert text_inter == true_interpretations, (f"Ошибка текст "
                                                             f"\nФР: {text_inter}"
                                                             f"\n!= "
@@ -242,7 +245,11 @@ class SerbPage(BasePage):
         # Для данной реализации можно воспользоваться примером цикла выше, взяв от туда сам цикл и сроку для получения текста.
         # Изменив метод получения текста по локатору на метод, который проверяет "не" видимость элемента - получим ожидаемую реализацию.
         # Метод для "не" видимости элемента:
-        # element = page.locator("XPath-какой-то")
-        # expect(element).not_to_be_visible()
-
-
+        # expect_not_visible_elements() - находится в файле base_page.py
+        elif answer in (OKO.answer_0_min, OKO.answer_0_less_limit):
+            for kay in OKO.interpretations:
+                scale, _ = OKO.interpretations[kay]
+                locator = f'//div[@class="testConclusion-container"][.//span[text()="{scale}"]]'
+                self.expect_not_visible_elements(locator)
+        else:
+            raise ValueError(f"Неизвестный ответ: {answer}")
