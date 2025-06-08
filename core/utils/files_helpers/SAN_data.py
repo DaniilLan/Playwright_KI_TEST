@@ -1,4 +1,4 @@
-class CAH:
+class SAN:
     transcript = {
         1: ("CPYE", "3"),
         2: ("CPYE", "2"),

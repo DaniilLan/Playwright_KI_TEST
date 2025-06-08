@@ -1,36 +1,43 @@
-import time
 import pyperclip
 
-from time import struct_time
-from core.utils.files_helpers.CAH_data import *
+from core.utils.files_helpers.SAN_data import *
 from core.utils.files_helpers.OKO_data import OKO
 from page_objects.base_page import BasePage
 
 
 class LocatorsSERB:
     LINK_TEST_MMIL = '//span[text()="Методика многостороннего исследования личности (ММИЛ)"]'
-    LINK_TEST_CAH = '//span[text()="Опросник «Самочувствие, Активность, Настроение» (САН)"]'
+    LINK_TEST_SAN = '//span[text()="Опросник «Самочувствие, Активность, Настроение» (САН)"]'
     LINK_TEST_IIG = '//span[text()="ЭЭГ-показатели для скрининга аффективной патологии"]'
     LINK_TEST_ITRAC = '//span[text()="ОСНОВНЫЕ ПАРАМЕТРЫ, АНАЛИЗИРУЕМЫЕ В ХОДЕ ОКУЛОГРАФИЧЕСКОГО ИССЛЕДОВАНИЯ (В СИСТЕМЕ Tobii Pro Lab)"]'
     LINK_TEST_OKO = '//span[text()="Опросник когнитивных ошибок (ОКО)"]'
-    LINK_TEST_BPC = '//span[text()="Показатели вариабельности ритма сердца (ВРС)"]'
+    LINK_TEST_VRS = '//span[text()="Показатели вариабельности ритма сердца (ВРС)"]'
     BUTTON_NEXT_MANUAL = '//button[text()="Далее"]'
     ANSWER_YES = '//div[span[text()="Да"]]'
     ANSWER_NO = '//div[span[text()="Нет"]]'
     BUTTON_SAVE_ANSWER = '//button[text()="Сохранить"]'
     LAST_PAGE_TEST = '//span[text()="377 из 377"]'
-    CAH_ANSWER_1 = '//div[@class="CPYE"]//div[span[text()="3"]]'
+    SAN_ANSWER_1 = '//div[@class="CPYE"]//div[span[text()="3"]]'
     NOTIFICATION = '//div[text()="Тест пройден. За результатами обратитесь к врачу."]'
     PATIENT_OKO = '//li[.//span[text()="Тест ОКО "]]'
     PATIENT_MMIL = '//li[.//span[text()="Тест ММИЛ "]]'
     ADD_EXAM = '//*[@id="root"]/div/div[1]/main/div[2]/div/button'
     CLUSTER_2 = '//div[span[text()="Психодиагностическое обследование"]]'
-    SHARE_TEST = '//html/body/div[2]/div/div[3]/div[2]/button'
+    CLUSTER_3 = '//div[span[text()="Нейрофизиологическое обследование"]]'
+    BUTTON_SHARE_TEST = '//html/body/div[2]/div/div[3]/div[2]/button'
     CHAK_BOX_OKO = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[1]/div[3]/div/div'
+    CHAK_BOX_SAN = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[3]/div[2]/div/div'
+    CHAK_BOX_MMIL = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[1]/div[1]/div/div'
+    CHAK_BOX_VRS = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[2]/div/div'
+    CHAK_BOX_ITRAC = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[1]/div/div'
+    CHAK_BOX_IIG = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[3]/div/div'
     SHARE_LINK_TEST = '//html/body/div[2]/div/div[2]/div[2]/div/input'
     BUTTON_RESULT_TEST = '//*[@id="root"]/div/div[1]/main/div[2]/table/tbody/tr[1]/td[5]/div/button[2]'
     RESULT_TEST_OKO = "//span[text()='Опросник когнитивных ошибок (ОКО)']"
+    RESULT_TEST_SAN = "//span[text()='Опросник «Самочувствие, Активность, Настроение» (САН)']"
     BUTTON_COPY_LINK_TEST = '//button[span[text()="Скопировать"]]'
+    FIRST_CARD_PATIENT = '//*[@id="root"]/div/div[1]/main/ul/li'
+
 
 
 class SerbPage(BasePage):
@@ -48,10 +55,10 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.LINK_TEST_OKO)
 
     def select_test_BPC(self):
-        self.click(LocatorsSERB.LINK_TEST_BPC)
+        self.click(LocatorsSERB.LINK_TEST_VRS)
 
-    def select_test_CAH(self):
-        self.click(LocatorsSERB.LINK_TEST_CAH)
+    def select_test_SAN(self):
+        self.click(LocatorsSERB.LINK_TEST_SAN)
 
     def skip_manual(self):
         self.click(LocatorsSERB.BUTTON_NEXT_MANUAL)
@@ -78,58 +85,58 @@ class SerbPage(BasePage):
         self.wait_visible_elements(LocatorsSERB.NOTIFICATION)
         self.expect_text(LocatorsSERB.NOTIFICATION, 'Тест пройден. За результатами обратитесь к врачу.')
 
-    def create_test_go_to_test_CAH(self):
-        self.click('//*[@id="root"]/div/div[1]/main/ul/li')
-        self.click('//*[@id="root"]/div/div[1]/main/div[2]/div/button')
-        self.click('//html/body/div[2]/div/div[3]/ul/div[2]')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/button')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[3]/div[2]/div/div')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/button')
+    def create_test_go_to_test_SAN(self):
+        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.ADD_EXAM)
+        self.click(LocatorsSERB.CLUSTER_2)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
+        self.click(LocatorsSERB.CHAK_BOX_SAN)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
         self.wait_time(100)
         self.open(link)
 
     def create_test_go_to_test_MMIL(self):
-        self.click('//*[@id="root"]/div/div[1]/main/ul/li')
-        self.click('//*[@id="root"]/div/div[1]/main/div[2]/div/button')
-        self.click('//html/body/div[2]/div/div[3]/ul/div[2]')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/button')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[1]/div[1]/div/div')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/button')
+        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.ADD_EXAM)
+        self.click(LocatorsSERB.CLUSTER_2)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
+        self.click(LocatorsSERB.CHAK_BOX_MMIL)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
         self.wait_time(100)
         self.open(link)
 
     def create_test_go_to_test_BPC(self):
-        self.click('//*[@id="root"]/div/div[1]/main/ul/li')
-        self.click('//*[@id="root"]/div/div[1]/main/div[2]/div/button')
-        self.click('//html/body/div[2]/div/div[3]/ul/div[3]')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[2]/div/div')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/button')
+        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.ADD_EXAM)
+        self.click(LocatorsSERB.CLUSTER_3)
+        self.click(LocatorsSERB.CHAK_BOX_VRS)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
         self.wait_time(100)
         self.open(link)
 
     def create_test_go_to_test_IIG(self):
-        self.click('//*[@id="root"]/div/div[1]/main/ul/li')
-        self.click('//*[@id="root"]/div/div[1]/main/div[2]/div/button')
-        self.click('//html/body/div[2]/div/div[3]/ul/div[3]')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[3]/div/div')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/button')
+        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.ADD_EXAM)
+        self.click(LocatorsSERB.CLUSTER_3)
+        self.click(LocatorsSERB.CHAK_BOX_IIG)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
         self.wait_time(100)
         self.open(link)
 
     def create_test_go_to_test_ITREC(self):
-        self.click('//*[@id="root"]/div/div[1]/main/ul/li')
-        self.click('//*[@id="root"]/div/div[1]/main/div[2]/div/button')
-        self.click('//html/body/div[2]/div/div[3]/ul/div[3]')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[1]/div/div')
-        self.click('//html/body/div[2]/div/div[3]/div[2]/button')
+        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.ADD_EXAM)
+        self.click(LocatorsSERB.CLUSTER_3)
+        self.click(LocatorsSERB.CHAK_BOX_ITRAC)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
         self.wait_time(100)
@@ -139,9 +146,9 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.PATIENT_OKO)
         self.click(LocatorsSERB.ADD_EXAM)
         self.click(LocatorsSERB.CLUSTER_2)
-        self.click(LocatorsSERB.SHARE_TEST)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.CHAK_BOX_OKO)
-        self.click(LocatorsSERB.SHARE_TEST)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
         self.wait_time(100)
@@ -151,19 +158,19 @@ class SerbPage(BasePage):
         self.open('http://192.168.7.35:8091/patients')
 
     def check_interpretation_for_test_CAN(self, answer):
-        self.click('//*[@id="root"]/div/div[1]/main/ul/li')
-        self.click('//*[@id="root"]/div/div[1]/main/div[2]/table/tbody/tr[1]/td[5]/div/button[2]')
-        self.click('//html/body/div[2]/div/ul/div[2]')
+        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.BUTTON_RESULT_TEST)
+        self.click(LocatorsSERB.CLUSTER_2)
         self.wait_load_state_networking()
-        self.click('//html/body/div[2]/div/div[4]/div/div[2]/div/span')
+        self.click(LocatorsSERB.RESULT_TEST_SAN)
         self.wait_load_state_networking()
         text_inter = ''
-        if answer in (CAH.answers_1_min_30, CAH.answers_1_34, CAH.answers_1_60, CAH.answers_1_90, CAH.answers_1_96):
-            text_inter = CAH.text_interpretation_1
-        elif answer in (CAH.answers_2_102, CAH.answers_2_105, CAH.answers_2_120, CAH.answers_2_135, CAH.answers_2_138, CAH.answers_2_example):
-            text_inter = CAH.text_interpretation_2
-        elif answer in (CAH.answers_3_144, CAH.answers_3_150, CAH.answers_3_max_210):
-            text_inter = CAH.text_interpretation_3
+        if answer in (SAN.answers_1_min_30, SAN.answers_1_34, SAN.answers_1_60, SAN.answers_1_90, SAN.answers_1_96):
+            text_inter = SAN.text_interpretation_1
+        elif answer in (SAN.answers_2_102, SAN.answers_2_105, SAN.answers_2_120, SAN.answers_2_135, SAN.answers_2_138, SAN.answers_2_example):
+            text_inter = SAN.text_interpretation_2
+        elif answer in (SAN.answers_3_144, SAN.answers_3_150, SAN.answers_3_max_210):
+            text_inter = SAN.text_interpretation_3
         fact_text = self.get_text('//html/body/div[2]/div/div[3]/div/div[3]/div/div[2]/span')
         assert fact_text == text_inter, (f'{fact_text} \n'
                                          f'!= {text_inter}\n'
@@ -205,12 +212,12 @@ class SerbPage(BasePage):
     def check_interpretation_for_test_OKO(self, answer):
         self.click(LocatorsSERB.PATIENT_OKO)
         self.click(LocatorsSERB.BUTTON_RESULT_TEST)
-        self.click(LocatorsSERB.KLASTER_2)
+        self.click(LocatorsSERB.CLUSTER_2)
         self.wait_load_state_networking()
         self.click(LocatorsSERB.RESULT_TEST_OKO)
         self.wait_load_state_networking()
-        if answer in (OKO.answer_all_limit, OKO.answer_all_max): # раньше было условие на проверку через is, но как выяснилось лучше использовать in
-            for kay in OKO.interpretations: # Я убрал тут items() так как мне нужно доставить только ключи "kay" из словаря интерпретаций
+        if answer in (OKO.answer_all_limit, OKO.answer_all_max):
+            for kay in OKO.interpretations:
                 scale, true_interpretations = OKO.interpretations[kay]
                 locator = f'//div[@class="testConclusion-container"][.//span[text()="{scale}"]]'
                 text_inter = self.get_text(locator)
@@ -218,11 +225,6 @@ class SerbPage(BasePage):
                                                             f"\nФР: {text_inter}"
                                                             f"\n!= "
                                                             f"\nОР: {true_interpretations}")
-        # Нужно написать условие, которые будет проверять отсутствие шкал (интерпретаций)
-        # Для данной реализации можно воспользоваться примером цикла выше, взяв от туда сам цикл и сроку для получения текста.
-        # Изменив метод получения текста по локатору на метод, который проверяет "не" видимость элемента - получим ожидаемую реализацию.
-        # Метод для "не" видимости элемента:
-        # expect_not_visible_elements() - находится в файле base_page.py
         elif answer in (OKO.answer_0_min, OKO.answer_0_less_limit):
             for kay in OKO.interpretations:
                 scale, _ = OKO.interpretations[kay]

@@ -1,27 +1,27 @@
 import time
 
 import pytest
-from core.utils.files_helpers.CAH_data import CAH
+from core.utils.files_helpers.SAN_data import SAN
 from core.utils.files_helpers.MMIL_data import MMIL
 from core.utils.files_helpers.OKO_data import OKO
 
 
 class TestSerb:
     @pytest.mark.parametrize('answer', [
-                                                CAH.answers_1_34,
-                                                CAH.answers_1_60,
-                                                CAH.answers_1_90,
-                                                CAH.answers_1_96,
-                                                CAH.answers_2_102,
-                                                CAH.answers_2_105,
-                                                CAH.answers_2_120,
-                                                CAH.answers_2_135,
-                                                CAH.answers_2_138,
-                                                CAH.answers_3_144,
-                                                CAH.answers_3_150,
-                                                CAH.answers_2_example,
-                                                CAH.answers_3_max_210,
-                                                CAH.answers_1_min_30,
+                                                SAN.answers_1_34,
+                                                SAN.answers_1_60,
+                                                SAN.answers_1_90,
+                                                SAN.answers_1_96,
+                                                SAN.answers_2_102,
+                                                SAN.answers_2_105,
+                                                SAN.answers_2_120,
+                                                SAN.answers_2_135,
+                                                SAN.answers_2_138,
+                                                SAN.answers_3_144,
+                                                SAN.answers_3_150,
+                                                SAN.answers_2_example,
+                                                SAN.answers_3_max_210,
+                                                SAN.answers_1_min_30,
                                                 ],
                              ids=[
                                  "answers_1_34",
@@ -41,16 +41,16 @@ class TestSerb:
                              ]
                              )
     def test_CAH(self, auth_serb, answer):
-        auth_serb.create_test_go_to_test_CAH()
-        auth_serb.select_test_CAH()
+        auth_serb.create_test_go_to_test_SAN()
+        auth_serb.select_test_SAN()
         auth_serb.skip_manual()
         for answer_key in answer:
-            class_name, text = CAH.transcript[answer_key]
+            class_name, text = SAN.transcript[answer_key]
             auth_serb.click_by_answer(class_name, text)
             auth_serb.save_answer_in_test()
         auth_serb.expect_notification_completed_test()
         auth_serb.go_to_page_doctor()
-        auth_serb.check_interpretation_for_test_CAN(answer)
+        auth_serb.check_interpretation_for_test_SAN(answer)
 
     # @pytest.mark.parametrize('answer', [
     #                                     MMIL.answer_test_yes,
@@ -94,10 +94,10 @@ class TestSerb:
     #     auth_serb.save_answer_in_test()
     #     auth_serb.expect_notification_completed_test()
     #
-    # def test_BPC(self, auth_serb):
-    #     auth_serb.create_test_go_to_test_BPC()
-    #     auth_serb.select_test_BPC()
-    #     auth_serb.fill_all_input_fields_BPC()
+    # def test_VRS(self, auth_serb):
+    #     auth_serb.create_test_go_to_test_VRS()
+    #     auth_serb.select_test_VRS()
+    #     auth_serb.fill_all_input_fields_VRS()
     #     auth_serb.save_answer_in_test()
     #     auth_serb.expect_notification_completed_test()
     #
