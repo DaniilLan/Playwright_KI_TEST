@@ -1,5 +1,7 @@
 import time
+import pyperclip
 
+from time import struct_time
 from core.utils.files_helpers.CAH_data import *
 from core.utils.files_helpers.OKO_data import OKO
 from page_objects.base_page import BasePage
@@ -21,13 +23,14 @@ class LocatorsSERB:
     NOTIFICATION = '//div[text()="Тест пройден. За результатами обратитесь к врачу."]'
     PATIENT_OKO = '//li[.//span[text()="Тест ОКО "]]'
     PATIENT_MMIL = '//li[.//span[text()="Тест ММИЛ "]]'
-    ADD_OBSLED = '//*[@id="root"]/div/div[1]/main/div[2]/div/button'
-    KLASTER_2 = '//div[span[text()="Психодиагностическое обследование"]]'
+    ADD_EXAM = '//*[@id="root"]/div/div[1]/main/div[2]/div/button'
+    CLUSTER_2 = '//div[span[text()="Психодиагностическое обследование"]]'
     SHARE_TEST = '//html/body/div[2]/div/div[3]/div[2]/button'
     CHAK_BOX_OKO = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[1]/div[3]/div/div'
     SHARE_LINK_TEST = '//html/body/div[2]/div/div[2]/div[2]/div/input'
     BUTTON_RESULT_TEST = '//*[@id="root"]/div/div[1]/main/div[2]/table/tbody/tr[1]/td[5]/div/button[2]'
     RESULT_TEST_OKO = "//span[text()='Опросник когнитивных ошибок (ОКО)']"
+    BUTTON_COPY_LINK_TEST = '//button[span[text()="Скопировать"]]'
 
 
 class SerbPage(BasePage):
@@ -82,10 +85,10 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
         self.click('//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[3]/div[2]/div/div')
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
-        url_test = self.page.get_attribute('//html/body/div[2]/div/div[2]/div[2]/div/input', 'value')
-        self.open(url_test)
-        self.wait_load_state_networking()
-        self.page.reload()
+        self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
+        link = pyperclip.paste()
+        self.wait_time(100)
+        self.open(link)
 
     def create_test_go_to_test_MMIL(self):
         self.click('//*[@id="root"]/div/div[1]/main/ul/li')
@@ -94,10 +97,10 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
         self.click('//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[1]/div[1]/div/div')
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
-        url_test = self.page.get_attribute('//html/body/div[2]/div/div[2]/div[2]/div/input', 'value')
-        self.open(url_test)
-        self.wait_load_state_networking()
-        self.page.reload()
+        self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
+        link = pyperclip.paste()
+        self.wait_time(100)
+        self.open(link)
 
     def create_test_go_to_test_BPC(self):
         self.click('//*[@id="root"]/div/div[1]/main/ul/li')
@@ -105,10 +108,10 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[3]/ul/div[3]')
         self.click('//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[2]/div/div')
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
-        url_test = self.page.get_attribute('//html/body/div[2]/div/div[2]/div[2]/div/input', 'value')
-        self.open(url_test)
-        self.wait_load_state_networking()
-        self.page.reload()
+        self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
+        link = pyperclip.paste()
+        self.wait_time(100)
+        self.open(link)
 
     def create_test_go_to_test_IIG(self):
         self.click('//*[@id="root"]/div/div[1]/main/ul/li')
@@ -116,10 +119,10 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[3]/ul/div[3]')
         self.click('//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[3]/div/div')
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
-        url_test = self.page.get_attribute('//html/body/div[2]/div/div[2]/div[2]/div/input', 'value')
-        self.open(url_test)
-        self.wait_load_state_networking()
-        self.page.reload()
+        self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
+        link = pyperclip.paste()
+        self.wait_time(100)
+        self.open(link)
 
     def create_test_go_to_test_ITREC(self):
         self.click('//*[@id="root"]/div/div[1]/main/ul/li')
@@ -127,22 +130,22 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[3]/ul/div[3]')
         self.click('//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[1]/div/div')
         self.click('//html/body/div[2]/div/div[3]/div[2]/button')
-        url_test = self.page.get_attribute('//html/body/div[2]/div/div[2]/div[2]/div/input', 'value')
-        self.open(url_test)
-        self.wait_load_state_networking()
-        self.page.reload()
+        self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
+        link = pyperclip.paste()
+        self.wait_time(100)
+        self.open(link)
 
     def create_test_go_to_test_OKO(self):
         self.click(LocatorsSERB.PATIENT_OKO)
-        self.click(LocatorsSERB.ADD_OBSLED)
-        self.click(LocatorsSERB.KLASTER_2)
+        self.click(LocatorsSERB.ADD_EXAM)
+        self.click(LocatorsSERB.CLUSTER_2)
         self.click(LocatorsSERB.SHARE_TEST)
         self.click(LocatorsSERB.CHAK_BOX_OKO)
         self.click(LocatorsSERB.SHARE_TEST)
-        url_test = self.page.get_attribute(LocatorsSERB.SHARE_LINK_TEST, 'value')
-        self.open(url_test)
-        self.wait_load_state_networking()
-        self.page.reload()
+        self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
+        link = pyperclip.paste()
+        self.wait_time(100)
+        self.open(link)
 
     def go_to_page_doctor(self):
         self.open('http://192.168.7.35:8091/patients')
@@ -155,38 +158,12 @@ class SerbPage(BasePage):
         self.click('//html/body/div[2]/div/div[4]/div/div[2]/div/span')
         self.wait_load_state_networking()
         text_inter = ''
-        if answer is CAH.answers_1_34:
+        if answer in (CAH.answers_1_min_30, CAH.answers_1_34, CAH.answers_1_60, CAH.answers_1_90, CAH.answers_1_96):
             text_inter = CAH.text_interpretation_1
-        elif answer is CAH.answers_1_60:
-            text_inter = CAH.text_interpretation_1
-        elif answer is CAH.answers_1_90:
-            text_inter = CAH.text_interpretation_1
-        elif answer is CAH.answers_2_99:
-            text_inter = CAH.text_interpretation_1
-        elif answer is CAH.answers_1_96:
-            text_inter = CAH.text_interpretation_1
-        elif answer is CAH.answers_2_102:
+        elif answer in (CAH.answers_2_102, CAH.answers_2_105, CAH.answers_2_120, CAH.answers_2_135, CAH.answers_2_138, CAH.answers_2_example):
             text_inter = CAH.text_interpretation_2
-        elif answer is CAH.answers_2_105:
-            text_inter = CAH.text_interpretation_2
-        elif answer is CAH.answers_2_120:
-            text_inter = CAH.text_interpretation_2
-        elif answer is CAH.answers_2_135:
-            text_inter = CAH.text_interpretation_2
-        elif answer is CAH.answers_2_138:
-            text_inter = CAH.text_interpretation_2
-        elif answer is CAH.answers_3_144:
+        elif answer in (CAH.answers_3_144, CAH.answers_3_150, CAH.answers_3_max_210):
             text_inter = CAH.text_interpretation_3
-        elif answer is CAH.answers_3_150:
-            text_inter = CAH.text_interpretation_3
-        elif answer is CAH.answers_2_example:
-            text_inter = CAH.text_interpretation_3
-        elif answer is CAH.answers_2_120:
-            text_inter = CAH.text_interpretation_3
-        elif answer is CAH.answers_3_max_210:
-            text_inter = CAH.text_interpretation_3
-        elif answer is CAH.answers_1_min_30:
-            text_inter = CAH.text_interpretation_1
         fact_text = self.get_text('//html/body/div[2]/div/div[3]/div/div[3]/div/div[2]/span')
         assert fact_text == text_inter, (f'{fact_text} \n'
                                          f'!= {text_inter}\n'

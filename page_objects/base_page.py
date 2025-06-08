@@ -219,3 +219,7 @@ class BasePage:
         self.wait_visible_elements(locator)
         expect_item = self.element_has_class(locator, 'open__db7c')
         assert expect_item, f"Элемент не виден, либо отсутствует нужный класс элемента 'open__db7c'"
+
+    def wait_time(self, time: int):
+        """Ожидание в миллисекундах"""
+        self.page.wait_for_timeout(time)
