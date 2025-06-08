@@ -7,84 +7,82 @@ from core.utils.files_helpers.OKO_data import OKO
 
 
 class TestSerb:
-    @pytest.mark.parametrize('answer', [
-                                                SAN.answers_1_34,
-                                                SAN.answers_1_60,
-                                                SAN.answers_1_90,
-                                                SAN.answers_1_96,
-                                                SAN.answers_2_102,
-                                                SAN.answers_2_105,
-                                                SAN.answers_2_120,
-                                                SAN.answers_2_135,
-                                                SAN.answers_2_138,
-                                                SAN.answers_3_144,
-                                                SAN.answers_3_150,
-                                                SAN.answers_2_example,
-                                                SAN.answers_3_max_210,
-                                                SAN.answers_1_min_30,
-                                                ],
-                             ids=[
-                                 "answers_1_34",
-                                 "answers_1_60",
-                                 "answers_1_90",
-                                 "answers_2_102",
-                                 "answers_2_105",
-                                 "answers_2_120",
-                                 "answers_2_135",
-                                 "answers_2_138",
-                                 "answers_3_144",
-                                 "answers_3_150",
-                                 "answers_2_example",
-                                 "answers_2_120",
-                                 "answers_3_max_210",
-                                 "answers_1_min_30",
-                             ]
-                             )
-    def test_CAH(self, auth_serb, answer):
-        auth_serb.create_test_go_to_test_SAN()
-        auth_serb.select_test_SAN()
-        auth_serb.skip_manual()
-        for answer_key in answer:
-            class_name, text = SAN.transcript[answer_key]
-            auth_serb.click_by_answer(class_name, text)
-            auth_serb.save_answer_in_test()
-        auth_serb.expect_notification_completed_test()
-        auth_serb.go_to_page_doctor()
-        auth_serb.check_interpretation_for_test_SAN(answer)
-
     # @pytest.mark.parametrize('answer', [
-    #                                     MMIL.answer_test_yes,
-    #                                     # MMIL.answer_test_no,
-    #                                     # MMIL.answer_test_less,
-    #                                     # MMIL.answer_exampl,
-    #                                     # MMIL.answer_BAA1_random,
-    #                                     # MMIL.answer_BAA2_random,
-    #                                     # MMIL.answer_COK_random,
-    #                                     # MMIL.answer_COK_random,
-    #                                     # MMIL.answer_KOEA1_random,
-    #                                     ],
+    #                                             SAN.answers_1_34,
+    #                                             SAN.answers_1_60,
+    #                                             SAN.answers_1_90,
+    #                                             SAN.answers_1_96,
+    #                                             SAN.answers_2_102,
+    #                                             SAN.answers_2_105,
+    #                                             SAN.answers_2_120,
+    #                                             SAN.answers_2_135,
+    #                                             SAN.answers_2_138,
+    #                                             SAN.answers_3_144,
+    #                                             SAN.answers_3_150,
+    #                                             SAN.answers_2_example,
+    #                                             SAN.answers_3_max_210,
+    #                                             SAN.answers_1_min_30,
+    #                                             ],
     #                          ids=[
-    #                              "answer_test_yes",
-    #                              # "answer_test_no",
-    #                              # "answer_test_less",
-    #                              # "answer_exampl",
-    #                              # "MMIL.answer_BAA1_random",
-    #                              # "MMIL.answer_BAA2_random"
-    #                              # "MMIL.answer_COK_random1",
-    #                              # "MMIL.answer_COK_random2",
-    #                              # "MMIL.answer_KOEA1_random",
+    #                              "answers_1_34",
+    #                              "answers_1_60",
+    #                              "answers_1_90",
+    #                              "answers_2_102",
+    #                              "answers_2_105",
+    #                              "answers_2_120",
+    #                              "answers_2_135",
+    #                              "answers_2_138",
+    #                              "answers_3_144",
+    #                              "answers_3_150",
+    #                              "answers_2_example",
+    #                              "answers_2_120",
+    #                              "answers_3_max_210",
+    #                              "answers_1_min_30",
     #                          ]
     #                          )
-    # def test_MMIL(self, auth_serb, answer):
-    #     auth_serb.create_test_go_to_test_MMIL()
-    #     auth_serb.select_test_MMIL()
+    # def test_CAH(self, auth_serb, answer):
+    #     auth_serb.create_test_go_to_test_SAN()
+    #     auth_serb.select_test_SAN()
     #     auth_serb.skip_manual()
     #     for answer_key in answer:
-    #         class_name, text = MMIL.transcript[answer_key]
+    #         class_name, text = SAN.transcript[answer_key]
     #         auth_serb.click_by_answer(class_name, text)
     #         auth_serb.save_answer_in_test()
     #     auth_serb.expect_notification_completed_test()
     #     auth_serb.go_to_page_doctor()
+    #     auth_serb.check_interpretation_for_test_SAN(answer)
+
+    @pytest.mark.parametrize('gender', ['male','female'])
+    @pytest.mark.parametrize('answer', [
+                                        # MMIL.answer_test_yes,
+                                        MMIL.answer_test_no,
+                                        # MMIL.answer_BAA1_random,
+                                        # MMIL.answer_BAA2_random,
+                                        ],
+                             ids=[
+                                 # "answer_test_yes",
+                                 "answer_test_no",
+                                 # "answer_test_less",
+                                 # "answer_exampl",
+                                 # "MMIL.answer_BAA1_random",
+                                 # "MMIL.answer_BAA2_random"
+                                 # "MMIL.answer_COK_random1",
+                                 # "MMIL.answer_COK_random2",
+                                 # "MMIL.answer_KOEA1_random",
+                             ]
+                             )
+    def test_MMIL(self, auth_serb, answer, gender):
+        # auth_serb.create_test_go_to_test_MMIL()
+        # auth_serb.select_test_MMIL()
+        # auth_serb.skip_manual()
+        # for answer_pair in answer:
+        #     answer_key = answer_pair[0]
+        #     class_name, text = MMIL.transcript[answer_key]
+        #     auth_serb.click_by_answer(class_name, text)
+        #     auth_serb.save_answer_in_test()
+        # auth_serb.expect_notification_completed_test()
+        auth_serb.go_to_page_doctor()
+        auth_serb.check_interpretation_for_test_MMIL(answer, gender)
 
     # def test_IIG(self, auth_serb):
     #     auth_serb.create_test_go_to_test_IIG()

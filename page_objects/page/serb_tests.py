@@ -1,5 +1,8 @@
+import re
+
 import pyperclip
 
+from core.utils.files_helpers.MMIL_data import calculate_all_matches
 from core.utils.files_helpers.SAN_data import *
 from core.utils.files_helpers.OKO_data import OKO
 from page_objects.base_page import BasePage
@@ -35,6 +38,8 @@ class LocatorsSERB:
     BUTTON_RESULT_TEST = '//*[@id="root"]/div/div[1]/main/div[2]/table/tbody/tr[1]/td[5]/div/button[2]'
     RESULT_TEST_OKO = "//span[text()='Опросник когнитивных ошибок (ОКО)']"
     RESULT_TEST_SAN = "//span[text()='Опросник «Самочувствие, Активность, Настроение» (САН)']"
+    RESULT_TEST_MMIL = "//span[text()='Методика многостороннего исследования личности (ММИЛ)']"
+
     BUTTON_COPY_LINK_TEST = '//button[span[text()="Скопировать"]]'
     FIRST_CARD_PATIENT = '//*[@id="root"]/div/div[1]/main/ul/li'
 
@@ -94,8 +99,9 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(100)
+        self.wait_time(300)
         self.open(link)
+        self.page.reload()
 
     def create_test_go_to_test_MMIL(self):
         self.click(LocatorsSERB.FIRST_CARD_PATIENT)
@@ -106,8 +112,9 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(100)
+        self.wait_time(300)
         self.open(link)
+        self.page.reload()
 
     def create_test_go_to_test_BPC(self):
         self.click(LocatorsSERB.FIRST_CARD_PATIENT)
@@ -117,8 +124,9 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(100)
+        self.wait_time(300)
         self.open(link)
+        self.page.reload()
 
     def create_test_go_to_test_IIG(self):
         self.click(LocatorsSERB.FIRST_CARD_PATIENT)
@@ -128,8 +136,9 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(100)
+        self.wait_time(300)
         self.open(link)
+        self.page.reload()
 
     def create_test_go_to_test_ITREC(self):
         self.click(LocatorsSERB.FIRST_CARD_PATIENT)
@@ -139,8 +148,9 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(100)
+        self.wait_time(300)
         self.open(link)
+        self.page.reload()
 
     def create_test_go_to_test_OKO(self):
         self.click(LocatorsSERB.PATIENT_OKO)
@@ -151,8 +161,9 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(100)
+        self.wait_time(300)
         self.open(link)
+        self.page.reload()
 
     def go_to_page_doctor(self):
         self.open('http://192.168.7.35:8091/patients')
@@ -232,3 +243,79 @@ class SerbPage(BasePage):
                 self.expect_not_visible_elements(locator)
         else:
             raise ValueError(f"Неизвестный ответ: {answer}")
+
+    def check_interpretation_for_test_MMIL(self, answer, gender):
+        # Выполняем навигацию по тесту
+        self.click(LocatorsSERB.PATIENT_MMIL)
+        self.click(LocatorsSERB.BUTTON_RESULT_TEST)
+        self.click(LocatorsSERB.CLUSTER_2)
+        self.wait_load_state_networking()
+        self.click(LocatorsSERB.RESULT_TEST_MMIL)
+        self.wait_load_state_networking()
+
+        # Получаем расчетные данные
+        data_result = calculate_all_matches(answer, gender)
+
+        locator = "//div[@class='testConclusion-container']"
+        blocks_count = self.page.locator(locator).count()
+
+        if blocks_count == 0:
+            raise ValueError("Не найдены блоки интерпретаций теста")
+
+        # Проверяем каждый блок интерпретации
+        for i in range(blocks_count):
+            block_locator = f"{locator}[{i + 1}]"
+            text_block = self.get_text(block_locator)
+
+            # Улучшенное регулярное выражение для всех шкал
+            pattern = (
+                r"Шкала\s+"
+                r"(F|L|K|Hs|D|Hy|Pd|Mf|Pa|Pt|Sc|Ma|Si)"  # Название шкалы
+                r"\.?\s*"
+                r"([^=]*?)"  # Название шкалы (до знака =)
+                r"\s*"
+                r"(?:F|L|K|Hs|D|Hy|Pd|Mf|Pa|Pt|Sc|Ma|Si)"  # Повторное название шкалы
+                r"\s*=\s*"
+                r"(\d+)"  # Значение
+                r"\s*"
+                r"(.*)"  # Интерпретация
+            )
+
+            match = re.search(pattern, text_block)
+
+            if not match:
+                raise ValueError(f"Не удалось распарсить текст интерпретации:\n{text_block}")
+
+            # Формируем результат из найденной шкалы
+            scale_result = {
+                "Шкала": f'scale_{match.group(1)}',
+                "Название": f' {match.group(2).strip()}',
+                "Норма": match.group(3),
+                "Интерпретация": match.group(4).strip()
+            }
+
+            # Получаем ожидаемые данные для этой шкалы
+            expected_data = data_result.get(scale_result['Шкала'])
+
+            if not expected_data:
+                raise ValueError(f"Нет ожидаемых данных для шкалы {scale_result['Шкала']}")
+
+            # Проверяем соответствие данных
+            assert scale_result['Название'] == expected_data['scale_name'], (
+                f"Несоответствие названия шкалы {scale_result['Шкала']}:\n"
+                f"Фактическое: {scale_result['Название']}\n"
+                f"Ожидаемое: {expected_data['scale_name']}"
+            )
+
+            norm_key = 'Norm_M' if gender == 'male' else 'Norm_F'
+            assert scale_result['Норма'] == str(expected_data[norm_key]), (
+                f"Несоответствие нормы для шкалы {scale_result['Шкала']} (пол: {gender}):\n"
+                f"Фактическое: {scale_result['Норма']}\n"
+                f"Ожидаемое: {expected_data[norm_key]}"
+            )
+
+            assert scale_result['Интерпретация'] == expected_data['interpretation'], (
+                f"Несоответствие интерпретации для шкалы {scale_result['Шкала']}:\n"
+                f"Фактическое: {scale_result['Интерпретация']}\n"
+                f"Ожидаемое: {expected_data['interpretation']}"
+            )

@@ -10,7 +10,7 @@ def main_page():
     with sync_playwright() as p:
         browser = p.chromium.launch(
             headless=False,
-            slow_mo=300,
+            slow_mo=100,
         )
         context = browser.new_context(
             viewport={'width': 1920, 'height': 1080},
