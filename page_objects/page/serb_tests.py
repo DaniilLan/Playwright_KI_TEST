@@ -1,4 +1,5 @@
 import re
+import time
 
 import pyperclip
 
@@ -19,6 +20,7 @@ class LocatorsSERB:
     ANSWER_YES = '//div[span[text()="Да"]]'
     ANSWER_NO = '//div[span[text()="Нет"]]'
     BUTTON_SAVE_ANSWER = '//button[text()="Сохранить"]'
+    BUTTON_SAVE_CHANGE = '//button[span[text()="Сохранить"]]'
     LAST_PAGE_TEST = '//span[text()="377 из 377"]'
     SAN_ANSWER_1 = '//div[@class="CPYE"]//div[span[text()="3"]]'
     NOTIFICATION = '//div[text()="Тест пройден. За результатами обратитесь к врачу."]'
@@ -34,14 +36,18 @@ class LocatorsSERB:
     CHAK_BOX_VRS = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[2]/div/div'
     CHAK_BOX_ITRAC = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[1]/div/div'
     CHAK_BOX_IIG = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[3]/div/div'
+
+    CHAK_BOX_CHANGE_GENDER = "/html/body/div[2]/div/div[3]/div[3]/ul/li[1]/div/div/div"
     SHARE_LINK_TEST = '//html/body/div[2]/div/div[2]/div[2]/div/input'
     BUTTON_RESULT_TEST = '//*[@id="root"]/div/div[1]/main/div[2]/table/tbody/tr[1]/td[5]/div/button[2]'
     RESULT_TEST_OKO = "//span[text()='Опросник когнитивных ошибок (ОКО)']"
     RESULT_TEST_SAN = "//span[text()='Опросник «Самочувствие, Активность, Настроение» (САН)']"
     RESULT_TEST_MMIL = "//span[text()='Методика многостороннего исследования личности (ММИЛ)']"
-
+    GENDER_PATIENT = "//div[contains(@class, 'userCard-infoBlock')][.//span[text()='Пол']]/span[@class='patientInfo']"
     BUTTON_COPY_LINK_TEST = '//button[span[text()="Скопировать"]]'
     FIRST_CARD_PATIENT = '//*[@id="root"]/div/div[1]/main/ul/li'
+    BUTTON_MENU_PATIENT = '//*[@id="root"]/div/div[1]/main/li/div/div[1]/div[2]'
+    BUTTON_CHANGE = "//div[span[text()='Изменить']]"
 
 
 
@@ -220,6 +226,18 @@ class SerbPage(BasePage):
         for e in range(3):
             self.fill_text(f'//*[@id="popap_window"]/div/div/div/div[2]/div[3]/div/div/div[2]/div[13]/div[2]/div[{e+1}]/input', text)
 
+    def change_gender(self, target_gender):
+        gender_labels = {
+            'male': 'Мужской',
+            'female': 'Женский'
+        }
+        self.click(LocatorsSERB.BUTTON_MENU_PATIENT)
+        self.click(LocatorsSERB.BUTTON_CHANGE)
+        time.sleep(1)
+        self.click(f"//label[@class='checkbox-label'][text()='{gender_labels[target_gender]}']")
+        time.sleep(1)
+        self.click(LocatorsSERB.BUTTON_SAVE_CHANGE)
+
     def check_interpretation_for_test_OKO(self, answer):
         self.click(LocatorsSERB.PATIENT_OKO)
         self.click(LocatorsSERB.BUTTON_RESULT_TEST)
@@ -247,75 +265,66 @@ class SerbPage(BasePage):
     def check_interpretation_for_test_MMIL(self, answer, gender):
         # Выполняем навигацию по тесту
         self.click(LocatorsSERB.PATIENT_MMIL)
+        F_gender = self.get_text(LocatorsSERB.GENDER_PATIENT)
+        gender_mapping = {
+            'Мужской': 'male',
+            'Женский': 'female'
+        }
+        if gender_mapping.get(F_gender) != gender:
+            self.change_gender(gender)
         self.click(LocatorsSERB.BUTTON_RESULT_TEST)
         self.click(LocatorsSERB.CLUSTER_2)
         self.wait_load_state_networking()
         self.click(LocatorsSERB.RESULT_TEST_MMIL)
         self.wait_load_state_networking()
 
-        # Получаем расчетные данные
         data_result = calculate_all_matches(answer, gender)
 
-        locator = "//div[@class='testConclusion-container']"
-        blocks_count = self.page.locator(locator).count()
+        for scale, scale_data in data_result.items():
+            if scale_data['interpretation'] != 'Не выводим':
+                ui_scale_data = self.get_text(f'//div[div/div/span[text()="Шкала {scale.split("_")[1]}"]]')
 
-        if blocks_count == 0:
-            raise ValueError("Не найдены блоки интерпретаций теста")
+                pattern = (
+                    r"Шкала\s+"
+                    r"(F|L|K|Hs|D|Hy|Pd|Mf|Pa|Pt|Sc|Ma|Si)"
+                    r"\.?\s*"
+                    r"([^=]*?)"
+                    r"\s*"
+                    r"(?:F|L|K|Hs|D|Hy|Pd|Mf|Pa|Pt|Sc|Ma|Si)"
+                    r"\s*=\s*"
+                    r"(\d+)"
+                    r"\s*"
+                    r"(.*)"
+                )
 
-        # Проверяем каждый блок интерпретации
-        for i in range(blocks_count):
-            block_locator = f"{locator}[{i + 1}]"
-            text_block = self.get_text(block_locator)
+                match = re.search(pattern, ui_scale_data)
 
-            # Улучшенное регулярное выражение для всех шкал
-            pattern = (
-                r"Шкала\s+"
-                r"(F|L|K|Hs|D|Hy|Pd|Mf|Pa|Pt|Sc|Ma|Si)"  # Название шкалы
-                r"\.?\s*"
-                r"([^=]*?)"  # Название шкалы (до знака =)
-                r"\s*"
-                r"(?:F|L|K|Hs|D|Hy|Pd|Mf|Pa|Pt|Sc|Ma|Si)"  # Повторное название шкалы
-                r"\s*=\s*"
-                r"(\d+)"  # Значение
-                r"\s*"
-                r"(.*)"  # Интерпретация
-            )
+                if not match:
+                    raise ValueError(f"Не удалось распарсить текст интерпретации:\n{ui_scale_data}")
 
-            match = re.search(pattern, text_block)
+                scale_result = {
+                    "Шкала": f'scale_{match.group(1)}',
+                    "Название": f' {match.group(2).strip()}',
+                    "Норма": match.group(3),
+                    "Интерпретация": match.group(4).strip()
+                }
 
-            if not match:
-                raise ValueError(f"Не удалось распарсить текст интерпретации:\n{text_block}")
+                # Проверяем соответствие данных
+                assert scale_result['Название'] == scale_data['scale_name'], (
+                    f"Несоответствие названия шкалы {scale_result['Шкала']}:\n"
+                    f"Фактическое: {scale_result['Название']}\n"
+                    f"Ожидаемое: {scale_data['scale_name']}"
+                )
 
-            # Формируем результат из найденной шкалы
-            scale_result = {
-                "Шкала": f'scale_{match.group(1)}',
-                "Название": f' {match.group(2).strip()}',
-                "Норма": match.group(3),
-                "Интерпретация": match.group(4).strip()
-            }
+                norm_key = 'Norm_M' if gender == 'male' else 'Norm_F'
+                assert scale_result['Норма'] == str(scale_data[norm_key]), (
+                    f"Несоответствие нормы для шкалы {scale_result['Шкала']} (пол: {gender}):\n"
+                    f"Фактическое: {scale_result['Норма']}\n"
+                    f"Ожидаемое: {scale_data[norm_key]}"
+                )
 
-            # Получаем ожидаемые данные для этой шкалы
-            expected_data = data_result.get(scale_result['Шкала'])
-
-            if not expected_data:
-                raise ValueError(f"Нет ожидаемых данных для шкалы {scale_result['Шкала']}")
-
-            # Проверяем соответствие данных
-            assert scale_result['Название'] == expected_data['scale_name'], (
-                f"Несоответствие названия шкалы {scale_result['Шкала']}:\n"
-                f"Фактическое: {scale_result['Название']}\n"
-                f"Ожидаемое: {expected_data['scale_name']}"
-            )
-
-            norm_key = 'Norm_M' if gender == 'male' else 'Norm_F'
-            assert scale_result['Норма'] == str(expected_data[norm_key]), (
-                f"Несоответствие нормы для шкалы {scale_result['Шкала']} (пол: {gender}):\n"
-                f"Фактическое: {scale_result['Норма']}\n"
-                f"Ожидаемое: {expected_data[norm_key]}"
-            )
-
-            assert scale_result['Интерпретация'] == expected_data['interpretation'], (
-                f"Несоответствие интерпретации для шкалы {scale_result['Шкала']}:\n"
-                f"Фактическое: {scale_result['Интерпретация']}\n"
-                f"Ожидаемое: {expected_data['interpretation']}"
-            )
+                assert scale_result['Интерпретация'] == scale_data['interpretation'], (
+                    f"Несоответствие интерпретации для шкалы {scale_result['Шкала']}:\n"
+                    f"Фактическое: {scale_result['Интерпретация']}\n"
+                    f"Ожидаемое: {scale_data['interpretation']}"
+                )

@@ -52,18 +52,16 @@ class TestSerb:
     #     auth_serb.go_to_page_doctor()
     #     auth_serb.check_interpretation_for_test_SAN(answer)
 
-    @pytest.mark.parametrize('gender', ['male','female'])
+    @pytest.mark.parametrize('gender', ['male', 'female'])
     @pytest.mark.parametrize('answer', [
-                                        # MMIL.answer_test_yes,
+                                        MMIL.answer_test_yes,
                                         MMIL.answer_test_no,
                                         # MMIL.answer_BAA1_random,
                                         # MMIL.answer_BAA2_random,
                                         ],
                              ids=[
-                                 # "answer_test_yes",
+                                 "answer_test_yes",
                                  "answer_test_no",
-                                 # "answer_test_less",
-                                 # "answer_exampl",
                                  # "MMIL.answer_BAA1_random",
                                  # "MMIL.answer_BAA2_random"
                                  # "MMIL.answer_COK_random1",
