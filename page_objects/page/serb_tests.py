@@ -105,9 +105,8 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(300)
+        self.wait_time(1000)
         self.open(link)
-        self.page.reload()
 
     def create_test_go_to_test_MMIL(self):
         self.click(LocatorsSERB.FIRST_CARD_PATIENT)
@@ -118,9 +117,8 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(300)
+        self.wait_time(1000)
         self.open(link)
-        self.page.reload()
 
     def create_test_go_to_test_BPC(self):
         self.click(LocatorsSERB.FIRST_CARD_PATIENT)
@@ -130,9 +128,8 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(300)
+        self.wait_time(1000)
         self.open(link)
-        self.page.reload()
 
     def create_test_go_to_test_IIG(self):
         self.click(LocatorsSERB.FIRST_CARD_PATIENT)
@@ -142,9 +139,8 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(300)
+        self.wait_time(1000)
         self.open(link)
-        self.page.reload()
 
     def create_test_go_to_test_ITREC(self):
         self.click(LocatorsSERB.FIRST_CARD_PATIENT)
@@ -154,9 +150,8 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(300)
+        self.wait_time(1000)
         self.open(link)
-        self.page.reload()
 
     def create_test_go_to_test_OKO(self):
         self.click(LocatorsSERB.PATIENT_OKO)
@@ -167,9 +162,8 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
-        self.wait_time(300)
+        self.wait_time(1000)
         self.open(link)
-        self.page.reload()
 
     def go_to_page_doctor(self):
         self.open('http://192.168.7.35:8091/patients')
@@ -311,7 +305,7 @@ class SerbPage(BasePage):
 
                 # Проверяем соответствие данных
                 assert scale_result['Название'] == scale_data['scale_name'], (
-                    f"Несоответствие названия шкалы {scale_result['Шкала']}:\n"
+                    f"Несоответствие названия шкалы {scale_result['Шкала']} (пол: {gender}):\n"
                     f"Фактическое: {scale_result['Название']}\n"
                     f"Ожидаемое: {scale_data['scale_name']}"
                 )
@@ -324,7 +318,8 @@ class SerbPage(BasePage):
                 )
 
                 assert scale_result['Интерпретация'] == scale_data['interpretation'], (
-                    f"Несоответствие интерпретации для шкалы {scale_result['Шкала']}:\n"
+                    f"Несоответствие интерпретации для шкалы {scale_result['Шкала']} (пол: {gender})\n "
+                    f"C нормой Ф:{scale_result['Норма']} / О:{scale_data[norm_key]}:\n"
                     f"Фактическое: {scale_result['Интерпретация']}\n"
                     f"Ожидаемое: {scale_data['interpretation']}"
                 )
