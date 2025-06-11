@@ -3,7 +3,8 @@ import time
 
 import pyperclip
 
-from core.utils.files_helpers.MMIL_data import calculate_all_matches
+from core.utils.files_helpers.MMIL_data import calculate_all_matches, MMIL
+from core.utils.files_helpers.QLESQ_data import QLESQ
 from core.utils.files_helpers.SAN_data import *
 from core.utils.files_helpers.OKO_data import OKO
 from page_objects.base_page import BasePage
@@ -16,6 +17,9 @@ class LocatorsSERB:
     LINK_TEST_ITRAC = '//span[text()="ОСНОВНЫЕ ПАРАМЕТРЫ, АНАЛИЗИРУЕМЫЕ В ХОДЕ ОКУЛОГРАФИЧЕСКОГО ИССЛЕДОВАНИЯ (В СИСТЕМЕ Tobii Pro Lab)"]'
     LINK_TEST_OKO = '//span[text()="Опросник когнитивных ошибок (ОКО)"]'
     LINK_TEST_VRS = '//span[text()="Показатели вариабельности ритма сердца (ВРС)"]'
+    LINK_TEST_DEBQ = '//span[text()="Голландский опросник пищевого поведения (DEBQ)"]'
+    LINK_TEST_QLESQ = '//span[text()="Шкала качества жизни (Q-Les-Q)"]'
+
     BUTTON_NEXT_MANUAL = '//button[text()="Далее"]'
     ANSWER_YES = '//div[span[text()="Да"]]'
     ANSWER_NO = '//div[span[text()="Нет"]]'
@@ -24,31 +28,41 @@ class LocatorsSERB:
     LAST_PAGE_TEST = '//span[text()="377 из 377"]'
     SAN_ANSWER_1 = '//div[@class="CPYE"]//div[span[text()="3"]]'
     NOTIFICATION = '//div[text()="Тест пройден. За результатами обратитесь к врачу."]'
+
+    FIRST_CARD_PATIENT = '//*[@id="root"]/div/div[1]/main/ul/li'
     PATIENT_OKO = '//li[.//span[text()="Тест ОКО "]]'
     PATIENT_MMIL = '//li[.//span[text()="Тест ММИЛ "]]'
+    PATIENT_DEBQ = '//li[.//span[text()="Тест DEBQ "]]'
+    PATIENT_QLESQ = '//li[.//span[text()="Тест Q-Les-Q "]]'
+
     ADD_EXAM = '//*[@id="root"]/div/div[1]/main/div[2]/div/button'
     CLUSTER_2 = '//div[span[text()="Психодиагностическое обследование"]]'
     CLUSTER_3 = '//div[span[text()="Нейрофизиологическое обследование"]]'
     BUTTON_SHARE_TEST = '//html/body/div[2]/div/div[3]/div[2]/button'
+
     CHAK_BOX_OKO = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[1]/div[3]/div/div'
     CHAK_BOX_SAN = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[3]/div[2]/div/div'
+    CHAK_BOX_DEBQ = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[3]/div[4]/div/div'
+    CHAK_BOX_QLESQ = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[3]/div[1]/div/div'
     CHAK_BOX_MMIL = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul[1]/div[1]/div/div'
     CHAK_BOX_VRS = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[2]/div/div'
     CHAK_BOX_ITRAC = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[1]/div/div'
     CHAK_BOX_IIG = '//html/body/div[2]/div/div[3]/div[2]/div/div[2]/ul/div[3]/div/div'
+    CHAK_BOX_CHANGE_GENDER = "//html/body/div[2]/div/div[3]/div[3]/ul/li[1]/div/div/div"
 
-    CHAK_BOX_CHANGE_GENDER = "/html/body/div[2]/div/div[3]/div[3]/ul/li[1]/div/div/div"
     SHARE_LINK_TEST = '//html/body/div[2]/div/div[2]/div[2]/div/input'
+
     BUTTON_RESULT_TEST = '//*[@id="root"]/div/div[1]/main/div[2]/table/tbody/tr[1]/td[5]/div/button[2]'
     RESULT_TEST_OKO = "//span[text()='Опросник когнитивных ошибок (ОКО)']"
     RESULT_TEST_SAN = "//span[text()='Опросник «Самочувствие, Активность, Настроение» (САН)']"
     RESULT_TEST_MMIL = "//span[text()='Методика многостороннего исследования личности (ММИЛ)']"
+    RESULT_TEST_DEBQ = "//span[text()='Голландский опросник пищевого поведения (DEBQ)']"
+
     GENDER_PATIENT = "//div[contains(@class, 'userCard-infoBlock')][.//span[text()='Пол']]/span[@class='patientInfo']"
     BUTTON_COPY_LINK_TEST = '//button[span[text()="Скопировать"]]'
-    FIRST_CARD_PATIENT = '//*[@id="root"]/div/div[1]/main/ul/li'
     BUTTON_MENU_PATIENT = '//*[@id="root"]/div/div[1]/main/li/div/div[1]/div[2]'
     BUTTON_CHANGE = "//div[span[text()='Изменить']]"
-
+    fourth_stage_QLESQ = "//div[@class='mFmQ']/span[text()='В целом, за последнюю неделю в какой степени Вы довольны…']"
 
 
 class SerbPage(BasePage):
@@ -65,6 +79,12 @@ class SerbPage(BasePage):
     def select_test_OKO(self):
         self.click(LocatorsSERB.LINK_TEST_OKO)
 
+    def select_test_DEBQ(self):
+        self.click(LocatorsSERB.LINK_TEST_DEBQ)
+
+    def select_test_QLESQ(self):
+        self.click(LocatorsSERB.LINK_TEST_QLESQ)
+
     def select_test_BPC(self):
         self.click(LocatorsSERB.LINK_TEST_VRS)
 
@@ -79,6 +99,19 @@ class SerbPage(BasePage):
 
     def click_answer_no(self):
         self.click(LocatorsSERB.ANSWER_NO)
+
+    def sending_answers_questions(self, answer, test):
+        for answer_key in answer:
+            if self.expect_visible_elements(LocatorsSERB.fourth_stage_QLESQ):
+                class_name, text = QLESQ.transcript2[answer_key]
+                self.click_by_answer(class_name, text)
+                continue
+            if test is MMIL:
+                answer_key = answer_key[0]
+            class_name, text = test.transcript[answer_key]
+            self.click_by_answer(class_name, text)
+            if self.expect_visible_elements(LocatorsSERB.BUTTON_SAVE_ANSWER):
+                self.save_answer_in_test()
 
     def save_answer_in_test(self):
         self.click(LocatorsSERB.BUTTON_SAVE_ANSWER)
@@ -102,6 +135,30 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.CLUSTER_2)
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.CHAK_BOX_SAN)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
+        self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
+        link = pyperclip.paste()
+        self.wait_time(1000)
+        self.open(link)
+
+    def create_test_go_to_test_DEBQ(self):
+        self.click(LocatorsSERB.PATIENT_DEBQ)
+        self.click(LocatorsSERB.ADD_EXAM)
+        self.click(LocatorsSERB.CLUSTER_2)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
+        self.click(LocatorsSERB.CHAK_BOX_DEBQ)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
+        self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
+        link = pyperclip.paste()
+        self.wait_time(1000)
+        self.open(link)
+
+    def create_test_go_to_test_QLESQ(self):
+        self.click(LocatorsSERB.PATIENT_QLESQ)
+        self.click(LocatorsSERB.ADD_EXAM)
+        self.click(LocatorsSERB.CLUSTER_2)
+        self.click(LocatorsSERB.BUTTON_SHARE_TEST)
+        self.click(LocatorsSERB.CHAK_BOX_QLESQ)
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
         self.click(LocatorsSERB.BUTTON_COPY_LINK_TEST)
         link = pyperclip.paste()
@@ -323,3 +380,25 @@ class SerbPage(BasePage):
                     f"Фактическое: {scale_result['Интерпретация']}\n"
                     f"Ожидаемое: {scale_data['interpretation']}"
                 )
+
+    def check_interpretation_for_test_DEBQ(self):
+        self.click(LocatorsSERB.PATIENT_DEBQ)
+        self.click(LocatorsSERB.BUTTON_RESULT_TEST)
+        self.click(LocatorsSERB.CLUSTER_2)
+        self.wait_load_state_networking()
+        self.click(LocatorsSERB.RESULT_TEST_DEBQ)
+        self.wait_load_state_networking()
+        #
+        # Отсутствие проверки интерпретации обусловлено
+        # отсутствием результатов тестирования на UI
+        #
+
+    def check_interpretation_for_test_QLESQ(self):
+        self.click(LocatorsSERB.PATIENT_DEBQ)
+        self.click(LocatorsSERB.BUTTON_RESULT_TEST)
+        self.click(LocatorsSERB.CLUSTER_2)
+        self.wait_load_state_networking()
+        self.click(LocatorsSERB.RESULT_TEST_DEBQ)
+        self.wait_load_state_networking()
+
+
