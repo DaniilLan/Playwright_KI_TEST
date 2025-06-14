@@ -124,6 +124,11 @@ class BasePage:
             )
 
     @handle_playwright_errors
+    def wait_after_appearance(self, locator):
+        if self.expect_visible_elements(locator):
+            self.wait_time(1000)
+
+    @handle_playwright_errors
     def expect_not_visible_elements(self, locators: Union[str, List[str]]):
         """Проверка - элемент не виден"""
         locators_list = [locators] if isinstance(locators, str) else locators

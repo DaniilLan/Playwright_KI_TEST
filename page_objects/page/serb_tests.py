@@ -284,9 +284,9 @@ class SerbPage(BasePage):
         }
         self.click(LocatorsSERB.BUTTON_MENU_PATIENT)
         self.click(LocatorsSERB.BUTTON_CHANGE)
-        time.sleep(1)
+        self.wait_time(500)
         self.click(f"//label[@class='checkbox-label'][text()='{gender_labels[target_gender]}']")
-        time.sleep(1)
+        self.wait_time(500)
         self.click(LocatorsSERB.BUTTON_SAVE_CHANGE)
 
     def check_interpretation_for_test_OKO(self, answer):
@@ -314,7 +314,6 @@ class SerbPage(BasePage):
             raise ValueError(f"Неизвестный ответ: {answer}")
 
     def check_interpretation_for_test_MMIL(self, answer, gender):
-        # Выполняем навигацию по тесту
         self.click(LocatorsSERB.PATIENT_MMIL)
         F_gender = self.get_text(LocatorsSERB.GENDER_PATIENT)
         gender_mapping = {
@@ -324,8 +323,8 @@ class SerbPage(BasePage):
         if gender_mapping.get(F_gender) != gender:
             self.change_gender(gender)
         self.click(LocatorsSERB.BUTTON_RESULT_TEST)
+        self.wait_after_appearance('//html/body/div[2]/div/div[4]/div')
         self.click(LocatorsSERB.CLUSTER_2)
-        self.wait_load_state_networking()
         self.click(LocatorsSERB.RESULT_TEST_MMIL)
         self.wait_load_state_networking()
 

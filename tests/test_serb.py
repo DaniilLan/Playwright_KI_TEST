@@ -53,32 +53,32 @@ class TestSerb:
     #     auth_serb.go_to_page_doctor()
     #     auth_serb.check_interpretation_for_test_SAN(answer)
 
-    # @pytest.mark.parametrize('gender', ['male', 'female'])
-    # @pytest.mark.parametrize('answer', [
-    #                                     # MMIL.answer_test_yes,
-    #                                     # MMIL.answer_test_no,
-    #                                     # MMIL.answer_BAA1_random,
-    #                                     # MMIL.answer_BAA2_random,
-    #                                     MMIL.answer_COK_random,
-    #                                     # MMIL.answer_KOEA1_random,
-    #                                     ],
-    #                          ids=[
-    #                              # "answer_test_yes",
-    #                              # "answer_test_no",
-    #                              # "answer_BAA1_random",
-    #                              # "answer_BAA2_random",
-    #                              "answer_COK_random",
-    #                              # "answer_KOEA1_random",
-    #                          ]
-    #                          )
-    # def test_MMIL(self, auth_serb, answer, gender):
-    #     auth_serb.create_test_go_to_test_MMIL()
-    #     auth_serb.select_test_MMIL()
-    #     auth_serb.skip_manual()
-    #     auth_serb.sending_answers_questions(answer, MMIL)
-    #     auth_serb.expect_notification_completed_test()
-    #     auth_serb.go_to_page_doctor()
-    #     auth_serb.check_interpretation_for_test_MMIL(answer, gender)
+    @pytest.mark.parametrize('gender', ['male', 'female'])
+    @pytest.mark.parametrize('answer', [
+                                        MMIL.answer_test_yes,
+                                        MMIL.answer_test_no,
+                                        MMIL.answer_BAA1_random,
+                                        MMIL.answer_BAA2_random,
+                                        MMIL.answer_COK_random,
+                                        MMIL.answer_KOEA1_random,
+                                        ],
+                             ids=[
+                                 "answer_test_yes",
+                                 "answer_test_no",
+                                 "answer_BAA1_random",
+                                 "answer_BAA2_random",
+                                 "answer_COK_random",
+                                 "answer_KOEA1_random",
+                             ]
+                             )
+    def test_MMIL(self, auth_serb, answer, gender):
+        auth_serb.create_test_go_to_test_MMIL()
+        auth_serb.select_test_MMIL()
+        auth_serb.skip_manual()
+        auth_serb.sending_answers_questions(answer, MMIL)
+        auth_serb.expect_notification_completed_test()
+        auth_serb.go_to_page_doctor()
+        auth_serb.check_interpretation_for_test_MMIL(answer, gender)
 
     # def test_IIG(self, auth_serb):
     #     auth_serb.create_test_go_to_test_IIG()

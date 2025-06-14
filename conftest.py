@@ -9,7 +9,7 @@ import pytest
 def main_page():
     with sync_playwright() as p:
         browser = p.chromium.launch(
-            headless=False,
+            headless=True,
             slow_mo=100,
         )
         context = browser.new_context(
