@@ -387,10 +387,7 @@ class SerbPage(BasePage):
         self.wait_load_state_networking()
         self.click(LocatorsSERB.RESULT_TEST_DEBQ)
         self.wait_load_state_networking()
-        #
-        # Отсутствие проверки интерпретации обусловлено
-        # отсутствием результатов тестирования на UI
-        #
+
 
     def check_interpretation_for_test_QLESQ(self):
         self.click(LocatorsSERB.PATIENT_DEBQ)
