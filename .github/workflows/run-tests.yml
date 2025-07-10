@@ -11,17 +11,55 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/pip
+          ~/.cache/playwright
+        key: ${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
-    - name: Install dependencies
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          libasound2t64 \
+          libatk1.0-0 \
+          libatk-bridge2.0-0 \
+          libcups2 \
+          libdbus-1-3 \
+          libdrm2 \
+          libgbm1 \
+          libglib2.0-0 \
+          libnspr4 \
+          libnss3 \
+          libpango-1.0-0 \
+          libx11-6 \
+          libxcb1 \
+          libxcomposite1 \
+          libxdamage1 \
+          libxext6 \
+          libxfixes3 \
+          libxrandr2 \
+          libxshmfence1 \
+          libxtst6 \
+          libffi8 \  # Вместо libffi7
+          x264
+
+    - name: Install Python dependencies
       run: |
         pip install -r requirements.txt
-        pip install pytest-playwright  # Если не указан в requirements.txt
-        playwright install  # Установка браузеров (Chromium, Firefox, WebKit)
-        playwright install-deps  # Установка системных зависимостей (только для Linux)
+        pip install pytest-playwright
+
+    - name: Install Playwright browsers
+      run: |
+        playwright install --with-deps
+        playwright install chromium
 
     - name: Run tests
       run: |
