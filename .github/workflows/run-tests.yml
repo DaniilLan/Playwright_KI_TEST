@@ -16,6 +16,11 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libasound2 libgbm-dev
+
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
@@ -27,11 +32,6 @@ jobs:
         playwright install --with-deps chromium
         playwright install-deps
 
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libasound2
-
     - name: Run tests
       run: |
-        pytest
+        xvfb-run pytest
