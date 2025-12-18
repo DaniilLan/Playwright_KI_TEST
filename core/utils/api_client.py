@@ -6,7 +6,7 @@ def get_token():
     auth_url = "http://192.168.7.35:5003/api/auth/sign-in"
     auth_data = {
         "email": "testdoctor@mail.ru",
-        "password": "Testdoctor1!"
+        "password": "123456Ss!"
     }
 
     try:

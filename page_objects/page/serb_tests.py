@@ -130,7 +130,7 @@ class SerbPage(BasePage):
         self.expect_text(LocatorsSERB.NOTIFICATION, 'Тест пройден. За результатами обратитесь к врачу.')
 
     def create_test_go_to_test_SAN(self):
-        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.ADD_EXAM)
         self.click(LocatorsSERB.CLUSTER_2)
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
@@ -142,7 +142,7 @@ class SerbPage(BasePage):
         self.open(link)
 
     def create_test_go_to_test_DEBQ(self):
-        self.click(LocatorsSERB.PATIENT_DEBQ)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.ADD_EXAM)
         self.click(LocatorsSERB.CLUSTER_2)
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
@@ -154,7 +154,7 @@ class SerbPage(BasePage):
         self.open(link)
 
     def create_test_go_to_test_QLESQ(self):
-        self.click(LocatorsSERB.PATIENT_QLESQ)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.ADD_EXAM)
         self.click(LocatorsSERB.CLUSTER_2)
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
@@ -166,7 +166,7 @@ class SerbPage(BasePage):
         self.open(link)
 
     def create_test_go_to_test_MMIL(self):
-        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.ADD_EXAM)
         self.click(LocatorsSERB.CLUSTER_2)
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
@@ -178,7 +178,7 @@ class SerbPage(BasePage):
         self.open(link)
 
     def create_test_go_to_test_BPC(self):
-        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.ADD_EXAM)
         self.click(LocatorsSERB.CLUSTER_3)
         self.click(LocatorsSERB.CHAK_BOX_VRS)
@@ -189,7 +189,7 @@ class SerbPage(BasePage):
         self.open(link)
 
     def create_test_go_to_test_IIG(self):
-        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.ADD_EXAM)
         self.click(LocatorsSERB.CLUSTER_3)
         self.click(LocatorsSERB.CHAK_BOX_IIG)
@@ -200,7 +200,7 @@ class SerbPage(BasePage):
         self.open(link)
 
     def create_test_go_to_test_ITREC(self):
-        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.ADD_EXAM)
         self.click(LocatorsSERB.CLUSTER_3)
         self.click(LocatorsSERB.CHAK_BOX_ITRAC)
@@ -211,7 +211,7 @@ class SerbPage(BasePage):
         self.open(link)
 
     def create_test_go_to_test_OKO(self):
-        self.click(LocatorsSERB.PATIENT_OKO)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.ADD_EXAM)
         self.click(LocatorsSERB.CLUSTER_2)
         self.click(LocatorsSERB.BUTTON_SHARE_TEST)
@@ -226,7 +226,7 @@ class SerbPage(BasePage):
         self.open('http://192.168.7.35:8091/patients')
 
     def check_interpretation_for_test_CAN(self, answer):
-        self.click(LocatorsSERB.FIRST_CARD_PATIENT)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.BUTTON_RESULT_TEST)
         self.click(LocatorsSERB.CLUSTER_2)
         self.wait_load_state_networking()
@@ -290,7 +290,7 @@ class SerbPage(BasePage):
         self.click(LocatorsSERB.BUTTON_SAVE_CHANGE)
 
     def check_interpretation_for_test_OKO(self, answer):
-        self.click(LocatorsSERB.PATIENT_OKO)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.BUTTON_RESULT_TEST)
         self.click(LocatorsSERB.CLUSTER_2)
         self.wait_load_state_networking()
@@ -381,7 +381,7 @@ class SerbPage(BasePage):
                 )
 
     def check_interpretation_for_test_DEBQ(self):
-        self.click(LocatorsSERB.PATIENT_DEBQ)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.BUTTON_RESULT_TEST)
         self.click(LocatorsSERB.CLUSTER_2)
         self.wait_load_state_networking()
@@ -393,7 +393,7 @@ class SerbPage(BasePage):
         #
 
     def check_interpretation_for_test_QLESQ(self):
-        self.click(LocatorsSERB.PATIENT_DEBQ)
+        self.click(LocatorsSERB.PATIENT_MMIL)
         self.click(LocatorsSERB.BUTTON_RESULT_TEST)
         self.click(LocatorsSERB.CLUSTER_2)
         self.wait_load_state_networking()
