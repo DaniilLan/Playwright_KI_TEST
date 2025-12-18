@@ -5,7 +5,7 @@
 ```
 pip install -r requirements.txt
 ```
-4. Возможно потребуется установить браузеры для Playwright
+4. Установить браузеры для Playwright
 ```
 playwright install 
 ```
